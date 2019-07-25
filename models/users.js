@@ -29,8 +29,8 @@ function create(data) {
     return new Promise(async (resolve, reject) => {
         await knex("user")
         .insert({
-            name: data.name,
-            family_name: data.familyName,   
+            name: data.firstName,
+            family_name: data.lastName,   
             email: data.email,
             birth_date: data.birthDate,
             institution: data.institution,
