@@ -38,7 +38,7 @@ function create(data) {
             subscribed: data.subscribed,
             cep: data.cep,
             street: data.street,
-            street_number: data.street_number,
+            street_number: data.streetNumber,
             neighborhood: data.neighborhood,
             state: data.state,
             city: data.city,
