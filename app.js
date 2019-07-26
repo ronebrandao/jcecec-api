@@ -10,8 +10,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 const users = require('./routes/users')
+const institutions = require('./routes/institutions')
 
 app.use('/users', users)
+app.use('/institutions', institutions)
 
 const PORT = process.env.PORT || 9000
 app.listen(PORT, () => console.log("JCECEC - API. Porta 9000"))
