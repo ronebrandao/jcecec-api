@@ -34,6 +34,7 @@ function create(data) {
         user_id: data.userId,
         title: data.title,
         file_url: data.fileUrl,
+        status: data.status,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
       .then(data => {

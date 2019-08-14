@@ -48,21 +48,23 @@ exports.create = (req, res) => {
     });
 };
 
-//TODO alter method
 exports.update = (req, res) => {
   const submissionId = req.params.id;
   const body = req.body;
 
   let data = {};
 
-  if (body.name) {
-    data.name = body.name;
+  if (body.userId) {
+    data.user_id = body.userId;
   }
-  if (body.birth_date) {
-    data.birth_date = body.birth_date;
+  if (body.title) {
+    data.title = body.title;
   }
-  if (body.phone) {
-    data.phone = body.phone;
+  if (body.fileUrl) {
+    data.file_url = body.fileUrl;
+  }
+  if (body.status) {
+    data.status = body.status;
   }
 
   users
