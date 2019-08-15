@@ -1,8 +1,9 @@
-const users = require("../models/submissions");
+const submissions = require("../models/submissions");
 const uploadS3 = require("../helpers/s3/upload");
+const downloadS3 = require("../helpers/s3/download");
 
 exports.list = (req, res) => {
-  users
+  submissions
     .list()
     .then(data => {
       res.status(200).json({
@@ -25,7 +26,7 @@ exports.create = (req, res) => {
     .then(data => {
       body.fileUrl = data.Location;
 
-      users
+      submissions
         .create(body)
         .then(() => {
           res.status(200).json({
@@ -67,7 +68,7 @@ exports.update = (req, res) => {
     data.status = body.status;
   }
 
-  users
+  submissions
     .findOne(submissionId)
     .then(student => {
       if (student) {
@@ -103,12 +104,12 @@ exports.update = (req, res) => {
 };
 
 exports.get = (req, res) => {
-  const submissionId = req.params.id;
+  const userId = req.params.id;
 
-  console.log(submissionId);
+  console.log(userId);
 
-  users
-    .findOne(submissionId)
+  submissions
+    .find(userId)
     .then(result => {
       if (result) {
         res.status(200).json({
@@ -131,4 +132,22 @@ exports.get = (req, res) => {
         message: error
       });
     });
+};
+
+exports.getFile = (req, res) => {
+  const fileName = req.params.id;
+
+  res.setHeader("Content-disposition", "attachment; filename=" + fileName);
+  res.setHeader("Content-type", "application/pdf");
+
+  downloadS3(fileName)
+    .createReadStream()
+    .on("error", error => {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        message: error
+      });
+    })
+    .pipe(res);
 };

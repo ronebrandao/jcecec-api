@@ -8,6 +8,7 @@ const upload = multer();
 router.get("/", controller.list);
 router.post("/", upload.single("file"), controller.create);
 router.get("/:id", controller.get);
+router.get("/file/:id", controller.getFile);
 router.put("/:id", controller.update);
 
 module.exports = router;

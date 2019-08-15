@@ -1,11 +1,23 @@
 const knex = require("../config/knex").knex;
 const moment = require("moment");
 
-function findOne(userId) {
+function find(userId) {
   return new Promise(async (resolve, reject) => {
     await knex("submissions")
       .where({ user_id: userId })
-      .first()
+      .then(data => {
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+function findOne(submissionId) {
+  return new Promise(async (resolve, reject) => {
+    await knex("submissions")
+      .where({ id: submissionId })
       .then(data => {
         resolve(data);
       })
@@ -62,6 +74,7 @@ function update(userId, data) {
 
 module.exports = {
   findOne: findOne,
+  find: find,
   list: list,
   create: create,
   update: update
