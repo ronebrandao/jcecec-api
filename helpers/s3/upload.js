@@ -1,4 +1,3 @@
-const fs = require("fs");
 const AWS = require("aws-sdk");
 const uuidv1 = require("uuid/v1");
 

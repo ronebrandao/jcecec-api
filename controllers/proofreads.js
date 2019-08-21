@@ -1,7 +1,7 @@
-const users = require("../models/users");
+const proofreads = require("../models/proofreads");
 
 exports.list = (req, res) => {
-  users
+  proofreads
     .list()
     .then(data => {
       res.status(200).json({
@@ -20,11 +20,11 @@ exports.list = (req, res) => {
 exports.create = (req, res) => {
   const body = req.body;
 
-  users
-    .findOne(body.email)
-    .then(student => {
-      if (!student) {
-        users
+  proofreads
+    .findOne(body.submissionId)
+    .then(proofread => {
+      if (!proofread) {
+        proofreads
           .create(body)
           .then(() => {
             res.status(200).json({
@@ -44,8 +44,8 @@ exports.create = (req, res) => {
 
       res.status(500).json({
         success: false,
-        code: "user_exists",
-        message: "Usuário já cadastrado"
+        code: "proofread_exists",
+        message: "Trabalho já possui revisão"
       });
     })
     .catch(error => {
@@ -58,7 +58,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const userId = req.params.id;
+  const submissionId = req.params.id;
   const body = req.body;
 
   let data = {};
@@ -100,12 +100,12 @@ exports.update = (req, res) => {
     data.complement = body.complement;
   }
 
-  users
-    .findOne(userId)
+  proofreads
+    .findOne(submissionId)
     .then(user => {
       if (user) {
         users
-          .update(userId, data)
+          .update(submissionId, data)
           .then(() => {
             res.status(200).json({
               success: true
@@ -123,8 +123,8 @@ exports.update = (req, res) => {
 
       res.status(404).json({
         success: false,
-        code: "user_not_found",
-        message: "Usuário não encontrado"
+        code: "proofread_not_found",
+        message: "Revisão não encontrada"
       });
     })
     .catch(error => {
@@ -136,10 +136,10 @@ exports.update = (req, res) => {
 };
 
 exports.get = (req, res) => {
-  const email = req.params.id;
+  const submissionId = req.params.id;
 
-  users
-    .findOne(email)
+  proofreads
+    .findOne(submissionId)
     .then(result => {
       if (result) {
         res.status(200).json({
@@ -152,8 +152,8 @@ exports.get = (req, res) => {
 
       res.status(404).json({
         success: false,
-        code: "user_not_found",
-        message: "Usuário não encontrado"
+        code: "proofread_not_found",
+        message: "Revisão não encontrada"
       });
     })
     .catch(error => {
