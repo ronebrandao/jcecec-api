@@ -12,10 +12,12 @@ app.use(bodyParser.json({ limit: "50mb" }));
 const users = require("./routes/users");
 const institutions = require("./routes/institutions");
 const submissions = require("./routes/submissions");
+const proofreads = require("./routes/proofreads");
 
 app.use("/users", users);
 app.use("/institutions", institutions);
 app.use("/submissions", submissions);
+app.use("/proofreads", proofreads);
 
 const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => console.log("JCECEC - API. Porta 9000"));

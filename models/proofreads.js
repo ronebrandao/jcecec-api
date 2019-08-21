@@ -1,23 +1,10 @@
 const knex = require("../config/knex").knex;
 const moment = require("moment");
 
-function find(userId) {
-  return new Promise(async (resolve, reject) => {
-    await knex("submissions")
-      .where({ user_id: userId })
-      .then(data => {
-        resolve(data);
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
-}
-
 function findOne(submissionId) {
   return new Promise(async (resolve, reject) => {
-    await knex("submissions")
-      .where({ id: submissionId })
+    await knex("proofreads")
+      .where({ submission_id: submissionId })
       .then(data => {
         resolve(data);
       })
@@ -29,7 +16,7 @@ function findOne(submissionId) {
 
 function list() {
   return new Promise(async (resolve, reject) => {
-    await knex("submissions")
+    await knex("proofreads")
       .then(data => {
         resolve(data);
       })
@@ -41,12 +28,18 @@ function list() {
 
 function create(data) {
   return new Promise(async (resolve, reject) => {
-    await knex("submissions")
+    await knex("proofreads")
       .insert({
-        user_id: data.userId,
-        title: data.title,
-        file_url: data.fileUrl,
-        status: data.status,
+        submission_id: data.submissionId,
+        contribuicao: data.contribuicao,
+        qualidade: data.qualidade,
+        organizacao: data.organizacao,
+        recomendacao: data.recomendacao,
+        cofianca_revisor: data.cofiancaRevisor,
+        categoria: data.categoria,
+        indicacao: data.indicacao,
+        mensagem_autor: data.mensagemAutor,
+        mensagem_organizacao: data.mensagemOrganizacao,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
       .then(data => {
@@ -60,7 +53,7 @@ function create(data) {
 
 function update(userId, data) {
   return new Promise(async (resolve, reject) => {
-    await knex("submissions")
+    await knex("proofreads")
       .where({ user_id: userId })
       .update(data)
       .then(data => {
@@ -74,7 +67,6 @@ function update(userId, data) {
 
 module.exports = {
   findOne: findOne,
-  find: find,
   list: list,
   create: create,
   update: update
