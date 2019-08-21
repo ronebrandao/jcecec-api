@@ -67,6 +67,9 @@ exports.update = (req, res) => {
   if (body.status) {
     data.status = body.status;
   }
+  if (body.proofreaderId) {
+    data.proofreader_id = bodu.proofreaderId;
+  }
 
   submissions
     .findOne(submissionId)
@@ -105,8 +108,6 @@ exports.update = (req, res) => {
 
 exports.get = (req, res) => {
   const userId = req.params.id;
-
-  console.log(userId);
 
   submissions
     .find(userId)

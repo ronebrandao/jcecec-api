@@ -57,9 +57,8 @@ exports.create = (req, res) => {
     });
 };
 
-//TODO alter method
 exports.update = (req, res) => {
-  const student_id = req.params.id;
+  const userId = req.params.id;
   const body = req.body;
 
   let data = {};
@@ -67,19 +66,46 @@ exports.update = (req, res) => {
   if (body.name) {
     data.name = body.name;
   }
-  if (body.birth_date) {
-    data.birth_date = body.birth_date;
+  if (body.email) {
+    data.email = body.email;
   }
-  if (body.phone) {
-    data.phone = body.phone;
+  if (body.birthDate) {
+    data.birth_date = body.birthDate;
+  }
+  if (body.institution) {
+    data.institution = body.institution;
+  }
+  if (body.type) {
+    data.type = body.type;
+  }
+  if (body.cep) {
+    data.cep = body.cep;
+  }
+  if (body.street) {
+    data.street = body.street;
+  }
+  if (body.streetNumber) {
+    data.street_number = body.streetNumber;
+  }
+  if (body.neighborhood) {
+    data.neighborhood = body.neighborhood;
+  }
+  if (body.state) {
+    data.state = body.state;
+  }
+  if (body.city) {
+    data.city = body.city;
+  }
+  if (body.complement) {
+    data.complement = body.complement;
   }
 
   users
-    .findOne(student_id)
-    .then(student => {
-      if (student) {
+    .findOne(userId)
+    .then(user => {
+      if (user) {
         users
-          .update(student_id, data)
+          .update(userId, data)
           .then(() => {
             res.status(200).json({
               success: true
@@ -111,8 +137,6 @@ exports.update = (req, res) => {
 
 exports.get = (req, res) => {
   const email = req.params.id;
-
-  console.log(email);
 
   users
     .findOne(email)
