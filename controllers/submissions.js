@@ -68,14 +68,14 @@ exports.update = (req, res) => {
     data.status = body.status;
   }
   if (body.proofreaderId) {
-    data.proofreader_id = bodu.proofreaderId;
+    data.proofreader_id = body.proofreaderId;
   }
 
   submissions
     .findOne(submissionId)
-    .then(student => {
-      if (student) {
-        users
+    .then(submission => {
+      if (submission) {
+        submissions
           .update(submissionId, data)
           .then(() => {
             res.status(200).json({
@@ -99,6 +99,7 @@ exports.update = (req, res) => {
       });
     })
     .catch(error => {
+      console.log("ERRO", error);
       res.status(500).json({
         success: false,
         message: error
