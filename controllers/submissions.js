@@ -68,7 +68,7 @@ exports.update = (req, res) => {
     data.status = body.status;
   }
   if (body.proofreaderId) {
-    data.proofreader_id = bodu.proofreaderId;
+    data.proofreader_id = body.proofreaderId;
   }
 
   submissions
