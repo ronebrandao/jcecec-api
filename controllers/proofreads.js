@@ -20,36 +20,22 @@ exports.list = (req, res) => {
 exports.create = (req, res) => {
   const body = req.body;
 
+  //Check if if is the second submission
+    //If yes -> calculate the average between the first and this proofread. If is satisfatory, send e-mail to admin 
+    //If no -> just save to database
+  //Check if there is the need to send email message about the proofread to the user or admin
+  //Save items to databse
+  //Send emails
+
   proofreads
-    .findOne(body.submissionId)
-    .then(proofread => {
-      if (!proofread) {
-        proofreads
-          .create(body)
-          .then(() => {
-            res.status(200).json({
-              success: true
-            });
-          })
-          .catch(error => {
-            console.log(error);
-            res.status(500).json({
-              success: false,
-              message: error
-            });
-          });
-
-        return;
-      }
-
-      res.status(500).json({
-        success: false,
-        code: "proofread_exists",
-        message: "Trabalho já possui revisão"
+    .create(body)
+    .then(() => {
+      res.status(200).json({
+        success: true
       });
     })
     .catch(error => {
-      console.log("ERROR", error);
+      console.log(error);
       res.status(500).json({
         success: false,
         message: error

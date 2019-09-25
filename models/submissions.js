@@ -1,4 +1,5 @@
 const knex = require("../config/knex").knex;
+
 const moment = require("moment");
 
 function find(userId) {
@@ -58,10 +59,10 @@ function create(data) {
   });
 }
 
-function update(userId, data) {
+function update(submissionId, data) {
   return new Promise(async (resolve, reject) => {
     await knex("submissions")
-      .where({ user_id: userId })
+      .where({ id: submissionId })
       .update(data)
       .then(data => {
         resolve(data);
