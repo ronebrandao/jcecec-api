@@ -42,7 +42,7 @@ exports.create = (req, res) => {
         return;
       }
 
-      res.status(500).json({
+      res.status(200).json({
         success: false,
         code: "user_exists",
         message: "Usuário já cadastrado"
