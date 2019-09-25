@@ -1,10 +1,6 @@
 const submissions = require("../models/submissions");
-const users = require("../models/users");
-
 const uploadS3 = require("../helpers/s3/upload");
 const downloadS3 = require("../helpers/s3/download");
-
-const sendSubmissionSentEmail = require("../helpers/email/sender");
 
 exports.list = (req, res) => {
   submissions
@@ -23,7 +19,7 @@ exports.list = (req, res) => {
     });
 };
 
-exports.create = async (req, res) => {
+exports.create = (req, res) => {
   const body = req.body;
   //Buffer is the memorystream of the file. It works fine.
   uploadS3(req.file.buffer)
@@ -32,27 +28,10 @@ exports.create = async (req, res) => {
 
       submissions
         .create(body)
-        .then(async () => {
-          try {
-            const user = await users.findOneById(body.userId);
-
-            const sent = await sendSubmissionSentEmail(
-              user.email,
-              user.name,
-              body.title
-            );
-
-            console.log("EMAIL ENVIADO: ", sent);
-
-            res.status(200).json({
-              success: true
-            });
-          } catch (error) {
-            res.status(500).json({
-              success: false,
-              message: error
-            });
-          }
+        .then(() => {
+          res.status(200).json({
+            success: true
+          });
         })
         .catch(error => {
           console.log(error);
@@ -88,8 +67,8 @@ exports.update = (req, res) => {
   if (body.status) {
     data.status = body.status;
   }
-  if (body.proofreaders) {
-    data.proofreaders = body.proofreaders;
+  if (body.proofreaderId) {
+    data.proofreader_id = body.proofreaderId;
   }
 
   submissions

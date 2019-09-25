@@ -1,5 +1,4 @@
 const knex = require("../config/knex").knex;
-
 const moment = require("moment");
 
 function find(userId) {

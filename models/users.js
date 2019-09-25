@@ -15,12 +15,6 @@ function findOne(email) {
   });
 }
 
-async function findOneById(userId) {
-  return await knex("user")
-    .where({ id: userId })
-    .first();
-}
-
 function list() {
   return new Promise(async (resolve, reject) => {
     await knex("user")
@@ -78,7 +72,6 @@ function update(email, data) {
 
 module.exports = {
   findOne: findOne,
-  findOneById,
   list: list,
   create: create,
   update: update
