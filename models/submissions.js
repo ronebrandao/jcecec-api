@@ -4,8 +4,10 @@ const moment = require("moment");
 
 function find(userId) {
   return new Promise(async (resolve, reject) => {
+    console.log("aqui");
     await knex("submissions")
       .where({ user_id: userId })
+      .orderBy("created_at", "desc")
       .then(data => {
         resolve(data);
       })
@@ -31,6 +33,7 @@ function findOne(submissionId) {
 function list() {
   return new Promise(async (resolve, reject) => {
     await knex("submissions")
+      .orderBy("created_at", "desc")
       .then(data => {
         resolve(data);
       })
