@@ -1,31 +1,26 @@
-const nodemailer = require("nodemailer");
-
-let transporter = nodemailer.createTransport({
-  host: "smtp-mail.outlook.com",
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD
-  }
-});
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendSubmissionSentEmail = async (email, name, title) => {
-  // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: process.env.SMTP_USER,
+  const msg = {
     to: email,
-    subject: "Submissão",
-    html: `Olá ${name}, 
-    <br/>
-    <br/>
-    A submissão do trabalho <b>${title}</b> foi realizada com sucesso.
-    <br/>
-    <br/>
-    O trabalho será analisado e em breve entraremos em contato.`
-  });
+    from: { email: "no-reply@jcecec.com.br", name: "JCECEC" },
+    templateId: "d-3a500733e37d4b918213be6489433442",
+    dynamic_template_data: {
+      name: name,
+      title: title
+    }
+  };
 
-  return info.messageId != undefined;
+  return new Promise((resolve, reject) => {
+    sgMail.send(msg, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
 module.exports = sendSubmissionSentEmail;
