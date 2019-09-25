@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const authenticationRoute = require("../helpers/authentication/index");
 
 const controller = require("../controllers/submissions");
 const upload = multer();
 
-router.get("/", controller.list);
-router.post("/", upload.single("file"), controller.create);
-router.get("/:id", controller.get);
-router.get("/file/:id", controller.getFile);
-router.put("/:id", controller.update);
+router.get("/", authenticationRoute, controller.list);
+router.post("/", authenticationRoute, upload.single("file"), controller.create);
+router.get("/:id", authenticationRoute, controller.get);
+router.get("/file/:id", authenticationRoute, controller.getFile);
+router.put("/:id", authenticationRoute, controller.update);
 
 module.exports = router;

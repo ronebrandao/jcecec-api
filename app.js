@@ -15,31 +15,6 @@ const institutions = require("./routes/institutions");
 const submissions = require("./routes/submissions");
 const proofreads = require("./routes/proofreads");
 
-authenticationRoute = express.Router();
-
-app.use("/", authenticationRoute);
-
-const cognitoExpress = new CognitoExpress({
-  region: "us-east-2",
-  cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
-  tokenUse: "access",
-  tokenExpiration: 3600000
-});
-
-authenticationRoute.use(function(req, res, next) {
-  let accessTokenFromClient = req.headers.authorization;
-
-  if (!accessTokenFromClient)
-    return res.status(401).send("Access Token missing from header");
-
-  cognitoExpress.validate(accessTokenFromClient, function(err, response) {
-    if (err) return res.status(401).send(err);
-
-    res.locals.user = response;
-    next();
-  });
-});
-
 app.use("/users", users);
 app.use("/institutions", institutions);
 app.use("/submissions", submissions);
