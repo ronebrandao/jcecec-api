@@ -53,8 +53,9 @@ function create(data) {
         complement: data.complement,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
-      .then(data => {
-        resolve(true);
+      .then(async a => {
+        result = await findOne(data.email);
+        resolve(result);
       })
       .catch(error => {
         reject(error);

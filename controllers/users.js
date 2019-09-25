@@ -26,9 +26,10 @@ exports.create = (req, res) => {
       if (!student) {
         users
           .create(body)
-          .then(() => {
+          .then(result => {
             res.status(200).json({
-              success: true
+              success: true,
+              data: result
             });
           })
           .catch(error => {
