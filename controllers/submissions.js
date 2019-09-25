@@ -36,13 +36,7 @@ exports.create = async (req, res) => {
           try {
             const user = await users.findOneById(body.userId);
 
-            const sent = await sendSubmissionSentEmail(
-              user.email,
-              user.name,
-              body.title
-            );
-
-            console.log("EMAIL ENVIADO: ", sent);
+            await sendSubmissionSentEmail(user.email, user.name, body.title);
 
             res.status(200).json({
               success: true
