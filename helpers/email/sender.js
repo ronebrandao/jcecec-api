@@ -5,15 +5,15 @@ let transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: "rone_filho@hotmail.com",
-    pass: "geranconheciment"
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD
   }
 });
 
 const sendSubmissionSentEmail = async (email, name, title) => {
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: "rone_filho@hotmail.com",
+    from: process.env.SMTP_USER,
     to: email,
     subject: "Submissão",
     html: `Olá ${name}, 
