@@ -55,8 +55,9 @@ async function setUnsubscription(userId, minicourseId) {
 
 async function list() {
   return await knex
-    .select("id", "titulo", "instrutor", "data", "vagas")
-    .from("minicursos");
+    .select("id", "titulo", "instrutor", "horario", "local", "data", "vagas")
+    .from("minicursos")
+    .orderBy("id");
 }
 
 async function subscribe(userId, minicourseId) {
