@@ -57,8 +57,13 @@ exports.subscribe = async (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
-      res.status(500).json({
+      status = 500;
+
+      if (err.message.includes("minicurso")) {
+        status = 400;
+      }
+
+      res.status(status).json({
         success: false,
         message: err.message
       });
@@ -77,8 +82,13 @@ exports.unsubscribe = async (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
-      res.status(500).json({
+      status = 500;
+
+      if (err.message.includes("minicurso")) {
+        status = 400;
+      }
+
+      res.status(status).json({
         success: false,
         message: err.message
       });
