@@ -17,32 +17,35 @@ exports.list = (req, res) => {
     });
 };
 
-exports.get = (req, res) => {
+exports.get = async (req, res) => {
   const id = req.params.id;
+  const userId = req.params.userId;
 
-  minicursos
-    .findOne(id)
-    .then(result => {
-      if (result) {
-        res.status(200).json({
-          success: true,
-          data: result
-        });
+  try {
+    minicurso = await minicursos.findOne(id);
 
-        return;
-      }
+    if (minicurso) {
+      result = await minicursos.findSubscrition(userId, id);
 
+      res.status(200).json({
+        success: true,
+        data: {
+          subscribed: result ? true : false,
+          minicurso
+        }
+      });
+    } else {
       res.status(404).json({
         success: false,
         message: "Minicurso não existe"
       });
-    })
-    .catch(error => {
-      res.status(500).json({
-        success: false,
-        message: error
-      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error
     });
+  }
 };
 
 exports.subscribe = async (req, res) => {

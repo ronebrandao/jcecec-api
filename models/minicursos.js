@@ -92,5 +92,6 @@ module.exports = {
   findOne,
   list,
   subscribe,
-  unsubscribe
+  unsubscribe,
+  findSubscrition
 };
