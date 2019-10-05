@@ -26,13 +26,12 @@ exports.get = async (req, res) => {
 
     if (minicurso) {
       result = await minicursos.findSubscrition(userId, id);
+      minicurso.subscribed = result ? true : false;
+      console.log(minicurso);
 
       res.status(200).json({
         success: true,
-        data: {
-          subscribed: result ? true : false,
-          minicurso
-        }
+        data: minicurso
       });
     } else {
       res.status(404).json({
