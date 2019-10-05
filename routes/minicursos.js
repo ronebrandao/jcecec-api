@@ -5,7 +5,7 @@ const authenticationRoute = require("../helpers/authentication/index");
 const controller = require("../controllers/minicursos");
 
 router.get("/", controller.list);
-router.get("/:id/:userId", authenticationRoute, controller.get);
+router.get("/:id/:userId", controller.get);
 router.post(
   "/subscribe/:id/:userId",
   authenticationRoute,

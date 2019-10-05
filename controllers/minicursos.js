@@ -27,11 +27,15 @@ exports.get = async (req, res) => {
     if (minicurso) {
       result = await minicursos.findSubscrition(userId, id);
       minicurso.subscribed = result ? true : false;
-      console.log(minicurso);
+
+      inAny = await minicursos.findAnySubscrition(userId);
 
       res.status(200).json({
         success: true,
-        data: minicurso
+        data: {
+          subscribed: inAny ? true : false,
+          minicurso
+        }
       });
     } else {
       res.status(404).json({
