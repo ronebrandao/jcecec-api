@@ -4,7 +4,7 @@ const users = require("../models/users");
 const uploadS3 = require("../helpers/s3/upload");
 const downloadS3 = require("../helpers/s3/download");
 
-const sendSubmissionSentEmail = require("../helpers/email/sender");
+const email = require("../helpers/email/sender");
 
 exports.list = (req, res) => {
   submissions
@@ -36,7 +36,7 @@ exports.create = async (req, res) => {
           try {
             const user = await users.findOneById(body.userId);
 
-            await sendSubmissionSentEmail(user.email, user.name, body.title);
+            await email.sendSubmissionSentEmail(user.email, user.name, body.title);
 
             res.status(200).json({
               success: true

@@ -17,32 +17,38 @@ exports.list = (req, res) => {
     });
 };
 
-exports.get = (req, res) => {
+exports.get = async (req, res) => {
   const id = req.params.id;
+  const userId = req.params.userId;
 
-  minicursos
-    .findOne(id)
-    .then(result => {
-      if (result) {
-        res.status(200).json({
-          success: true,
-          data: result
-        });
+  try {
+    minicurso = await minicursos.findOne(id);
 
-        return;
-      }
+    if (minicurso) {
+      result = await minicursos.findSubscrition(userId, id);
+      minicurso.subscribed = result ? true : false;
 
+      inAny = await minicursos.findAnySubscrition(userId);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          subscribed: inAny ? true : false,
+          minicurso
+        }
+      });
+    } else {
       res.status(404).json({
         success: false,
         message: "Minicurso não existe"
       });
-    })
-    .catch(error => {
-      res.status(500).json({
-        success: false,
-        message: error
-      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error
     });
+  }
 };
 
 exports.subscribe = async (req, res) => {
@@ -57,8 +63,13 @@ exports.subscribe = async (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
-      res.status(500).json({
+      status = 500;
+
+      if (err.message.includes("minicurso")) {
+        status = 400;
+      }
+
+      res.status(status).json({
         success: false,
         message: err.message
       });
@@ -77,8 +88,13 @@ exports.unsubscribe = async (req, res) => {
       });
     })
     .catch(err => {
-      console.log(err);
-      res.status(500).json({
+      status = 500;
+
+      if (err.message.includes("minicurso")) {
+        status = 400;
+      }
+
+      res.status(status).json({
         success: false,
         message: err.message
       });

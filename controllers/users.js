@@ -1,4 +1,5 @@
 const users = require("../models/users");
+const email = require("../helpers/email/sender");
 
 exports.list = (req, res) => {
   users
@@ -26,11 +27,21 @@ exports.create = (req, res) => {
       if (!student) {
         users
           .create(body)
-          .then(result => {
-            res.status(200).json({
-              success: true,
-              data: result
-            });
+          .then(async result => {
+
+            try {
+              await email.sendSubscriptionEmail(result.email, result.name);
+
+              res.status(200).json({
+                success: true,
+                data: result
+              });
+            } catch (error) {
+              res.status(500).json({
+                success: false,
+                message: error
+              });
+            }
           })
           .catch(error => {
             console.log(error);

@@ -15,6 +15,14 @@ async function findSubscrition(userId, minicourseId) {
     .first();
 }
 
+async function findAnySubscrition(userId) {
+  return await knex("user_x_minicursos")
+    .where({
+      user_id: userId
+    })
+    .first();
+}
+
 async function setSubscription(userId, minicourseId) {
   try {
     course = await findOne(minicourseId);
@@ -92,5 +100,7 @@ module.exports = {
   findOne,
   list,
   subscribe,
-  unsubscribe
+  unsubscribe,
+  findSubscrition,
+  findAnySubscrition
 };
