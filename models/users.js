@@ -34,7 +34,7 @@ function list() {
 }
 
 async function listAllUsersExcept(userId) {
-  return await knex('user').whereNot({ id: userId })
+  return await knex('user').whereNot({ id: userId, type: 'user' }).orderBy('email', 'asc')
 }
 
 function create(data) {
