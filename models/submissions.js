@@ -33,7 +33,6 @@ function findOne(submissionId) {
 async function list(userId) {
   try {
     const user = await knex('user').where({ id: userId }).first()
-    console.log(user)
     if (user.type === 'admin')
       return await knex('submissions')
     else if (user.type === 'proofreader') {
@@ -51,7 +50,6 @@ async function list(userId) {
     else
       return await knex('submissions').where({ user_id: userId })
   } catch (err) {
-    console.log(err)
     throw err
   }
 }
