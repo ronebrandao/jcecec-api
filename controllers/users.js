@@ -18,6 +18,22 @@ exports.list = (req, res) => {
     });
 };
 
+exports.listAllUsersExcept = (req, res) => {
+  users.listAllUsersExcept(req.params.id)
+    .then(resp => {
+      res.status(200).json({
+        success: true,
+        data: resp
+      })
+    })
+    .catch(err => {
+      res.status(500).json({
+        success: false,
+        message: err
+      })
+    })
+}
+
 exports.create = (req, res) => {
   const body = req.body;
 

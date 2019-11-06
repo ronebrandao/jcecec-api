@@ -30,17 +30,19 @@ function findOne(submissionId) {
   });
 }
 
-function list() {
-  return new Promise(async (resolve, reject) => {
-    await knex("submissions")
-      .orderBy("created_at", "desc")
-      .then(data => {
-        resolve(data);
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
+async function list(userId) {
+  try {
+    const user = await knex('user').where({ id: userId }).first()
+    if (user.type === 'admin')
+      return await knex('submissions')
+    else if (user.type === 'proofreader')
+      return await knex('submissions').whereIn('id', user.sub_ids)
+    else
+      return await knex('submissions').where({ user_id: userId })
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
 }
 
 function create(data) {

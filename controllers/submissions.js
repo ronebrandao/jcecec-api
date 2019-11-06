@@ -7,8 +7,9 @@ const downloadS3 = require("../helpers/s3/download");
 const email = require("../helpers/email/sender");
 
 exports.list = (req, res) => {
+  console.log(req.params.id)
   submissions
-    .list()
+    .list(req.params.id)
     .then(data => {
       res.status(200).json({
         success: true,
