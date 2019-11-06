@@ -192,7 +192,7 @@ exports.updateSubmissionIds = asyncHandler(async (req, res) => {
 
       await trans("submissions").update({ has_proofreaders: true, status: "revisao" }).where({ id: submissionId });
 
-      trans.rollback();
+      trans.commit();
       res.status(200).send();
     }
     catch (error) {
