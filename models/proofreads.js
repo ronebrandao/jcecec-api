@@ -1,5 +1,6 @@
 const knex = require("../config/knex").knex;
 const moment = require("moment");
+const email = require("../helpers/email/sender");
 
 function findOne(submissionId) {
   return new Promise(async (resolve, reject) => {
@@ -27,8 +28,9 @@ function list() {
 }
 
 async function create(data) {
+  const trx = await knex.transaction()
   try {
-    return await knex("proofreads")
+    await trx("proofreads")
       .insert({
         user_id: data.userId,
         submission_id: data.submissionId,
@@ -43,7 +45,14 @@ async function create(data) {
         mensagem_organizacao: data.mensagemOrganizacao,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
+    const submission = await trx('submissions').where({ id: data.submissionId })
+    const user = await trx('user').where({ id: data.userId })
+    const admin = await trx.select('email').from('user').where({ type: 'admin' }).orderBy('id', 'asc').map(x => x.email)
+    await email.sendProofreadMadeEmail(admin, user.name + ' ' + user.family_name, submission.title, data.mensagemOrganizacao)
+    trx.commit()
+
   } catch (err) {
+    trx.rollback()
     throw err
   }
 }
