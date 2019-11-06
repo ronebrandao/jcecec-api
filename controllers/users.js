@@ -1,6 +1,7 @@
 const users = require("../models/users");
 const email = require("../helpers/email/sender");
 const knex = require("../config/knex").knex;
+const asyncHandler = require('express-async-handler')
 
 exports.list = (req, res) => {
   users
@@ -165,7 +166,7 @@ exports.update = async (req, res) => {
     });
 };
 
-exports.updateSubmissionIds = async (req, res) => {
+exports.updateSubmissionIds = asyncHandler(async (req, res) => {
   const submissionId = req.params.id;
   const body = req.body;
 
@@ -175,16 +176,24 @@ exports.updateSubmissionIds = async (req, res) => {
 
       for (let userId of body.proofreaders) {
 
-        let sub_ids = (await trans.select("sub_ids").from("user").where({ id: userId }).first()).sub_ids || [];
+        if (userId != null) {
+          let user = await trans.select("sub_ids", "name", "email").from("user").where({ id: userId }).first()
+          
+          let sub_ids = user.sub_ids || [];
+          sub_ids.push(submissionId);
 
-        sub_ids.push(submissionId);
+          await trans("user").update({ sub_ids: sub_ids }).where({ id: userId });
 
-        await trans("user").update({ sub_ids: sub_ids }).where({ id: userId });
+          let submission = await trans.select("title").from("submissions").where({ id: submissionId }).first();
+          
+          await email.sendProofreadSetEmail(user.email, user.name, submission.title);
+        }
       }
-      trans.commit();
 
+      await trans("submissions").update({ has_proofreaders: true, status: "revisao" }).where({ id: submissionId });
 
-      res.status(200);
+      trans.rollback();
+      res.status(200).send();
     }
     catch (error) {
       trans.rollback();
@@ -197,7 +206,7 @@ exports.updateSubmissionIds = async (req, res) => {
       message: "Proofreaders is a required field"
     });
   }
-};
+});
 
 exports.get = (req, res) => {
   const email = req.params.id;

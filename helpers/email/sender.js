@@ -44,7 +44,30 @@ const sendSubscriptionEmail = async (email, name) => {
   });
 };
 
+const sendProofreadSetEmail = async (email, name, title) => {
+  const msg = {
+    to: email,
+    from: { email: "no-reply@jcecec.com.br", name: "JCECEC" },
+    templateId: "d-3a157869661949dc856f5b0617e277cf",
+    dynamic_template_data: {
+      name: name,
+      title: title
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    sgMail.send(msg, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 module.exports = {
   sendSubmissionSentEmail,
-  sendSubscriptionEmail
+  sendSubscriptionEmail,
+  sendProofreadSetEmail
 };
