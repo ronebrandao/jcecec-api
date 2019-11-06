@@ -66,8 +66,33 @@ const sendProofreadSetEmail = async (email, name, title) => {
   });
 };
 
+
+const sendProofreadMadeEmail = async (email, fullName, title, message) => {
+  const msg = {
+    to: email,
+    from: { email: "no-reply@jcecec.com.br", name: "JCECEC" },
+    templateId: "d-149e273bf8234a849ff6cdc27b744497",
+    dynamic_template_data: {
+      fullName: fullName,
+      title: title,
+      message: message ? message : "O revisor não deixou uma mensagem."
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    sgMail.send(msg, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 module.exports = {
   sendSubmissionSentEmail,
   sendSubscriptionEmail,
-  sendProofreadSetEmail
+  sendProofreadSetEmail,
+  sendProofreadMadeEmail
 };
