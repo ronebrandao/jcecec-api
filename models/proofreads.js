@@ -26,29 +26,25 @@ function list() {
   });
 }
 
-function create(data) {
-  return new Promise(async (resolve, reject) => {
-    await knex("proofreads")
+async function create(data) {
+  try {
+    return await knex("proofreads")
       .insert({
         submission_id: data.submissionId,
         contribuicao: data.contribuicao,
         qualidade: data.qualidade,
         organizacao: data.organizacao,
         recomendacao: data.recomendacao,
-        cofianca_revisor: data.cofiancaRevisor,
+        confianca_revisor: data.confiancaRevisor,
         categoria: data.categoria,
         indicacao: data.indicacao,
-        mensagem_autor: data.mensagemAutor,
+        originalidade: data.originalidade,
         mensagem_organizacao: data.mensagemOrganizacao,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
-      .then(data => {
-        resolve(true);
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
+  } catch (err) {
+    throw err
+  }
 }
 
 function update(userId, data) {
