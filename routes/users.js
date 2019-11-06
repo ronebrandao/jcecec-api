@@ -8,5 +8,6 @@ router.get("/", authenticationRoute, controller.list);
 router.post("/", controller.create);
 router.get("/:id", authenticationRoute, controller.get);
 router.put("/:id", authenticationRoute, controller.update);
+router.put("/submission/:id", authenticationRoute, controller.updateSubmissionIds);
 
 module.exports = router;

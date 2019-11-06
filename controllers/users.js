@@ -1,5 +1,6 @@
 const users = require("../models/users");
 const email = require("../helpers/email/sender");
+const knex = require("../config/knex").knex;
 
 exports.list = (req, res) => {
   users
@@ -69,9 +70,10 @@ exports.create = (req, res) => {
     });
 };
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const userId = req.params.id;
   const body = req.body;
+  console.log(body);
 
   let data = {};
 
@@ -145,6 +147,40 @@ exports.update = (req, res) => {
         message: error
       });
     });
+};
+
+exports.updateSubmissionIds = async (req, res) => {
+  const submissionId = req.params.id;
+  const body = req.body;
+
+  if (body.proofreaders) {
+    const trans = await knex.transaction();
+    try {
+
+      for (let userId of body.proofreaders) {
+
+        let sub_ids = (await trans.select("sub_ids").from("user").where({ id: userId }).first()).sub_ids || [];
+
+        sub_ids.push(submissionId);
+
+        await trans("user").update({ sub_ids: sub_ids }).where({ id: userId });
+      }
+      trans.commit();
+
+
+      res.status(200);
+    }
+    catch (error) {
+      trans.rollback();
+      res.status(500).json({
+        message: error
+      });
+    }
+  } else {
+    res.status(400).json({
+      message: "Proofreaders is a required field"
+    });
+  }
 };
 
 exports.get = (req, res) => {
