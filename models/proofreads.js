@@ -30,6 +30,7 @@ async function create(data) {
   try {
     return await knex("proofreads")
       .insert({
+        user_id: data.userId,
         submission_id: data.submissionId,
         contribuicao: data.contribuicao,
         qualidade: data.qualidade,
