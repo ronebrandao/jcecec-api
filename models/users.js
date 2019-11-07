@@ -33,6 +33,10 @@ function list() {
   });
 }
 
+async function listAllUsersExcept(userId) {
+  return await knex('user').whereNot({ id: userId, type: 'user' }).orderBy('email', 'asc')
+}
+
 function create(data) {
   return new Promise(async (resolve, reject) => {
     await knex("user")
@@ -82,5 +86,6 @@ module.exports = {
   findOneById,
   list: list,
   create: create,
-  update: update
+  update: update,
+  listAllUsersExcept
 };
