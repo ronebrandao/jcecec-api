@@ -28,7 +28,8 @@ function list() {
 }
 
 async function listSummary(submissionId) {
-  console.log(await knex.raw(`
+
+  const query = `
   SELECT  round(avg(originalidade)) as originalidade,
         round(avg(contribuicao)) as contribuicao,
         round(avg(qualidade))   as qualidade,
@@ -38,8 +39,10 @@ async function listSummary(submissionId) {
         STRING_AGG (categoria, '|') categorias,
         COUNT(*) as revisoes
   FROM public.proofreads
-  WHERE submission_id 
-  `))
+  WHERE submission_id = ?
+  `;
+
+  return (await knex.raw(query, submissionId)).rows[0];
 }
 
 async function create(data) {
@@ -60,10 +63,16 @@ async function create(data) {
         mensagem_organizacao: data.mensagemOrganizacao,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
-    const submission = await trx('submissions').where({ id: data.submissionId })
-    const user = await trx('user').where({ id: data.userId })
-    const admin = await trx.select('email').from('user').where({ type: 'admin' }).orderBy('id', 'asc').map(x => x.email)
-    await email.sendProofreadMadeEmail(admin, user.name + ' ' + user.family_name, submission.title, data.mensagemOrganizacao)
+    // const submission = await trx.select("title").from('submissions').where({ id: data.submissionId }).first();
+    // const user = await trx.select("name", "family_name").from('user').where({ id: data.userId }).first();
+    // const admin = await trx.select('email').from('user').where({ type: 'admin' }).orderBy('id', 'asc').map(x => x.email);
+
+    // console.log(submission);
+    // console.log(user);
+    // console.log(admin);
+
+    // await email.sendProofreadMadeEmail("rone_filho@hotmail.com", user.name + ' ' + user.family_name, submission.title, data.mensagemOrganizacao)
+
     trx.commit()
 
   } catch (err) {
@@ -90,5 +99,6 @@ module.exports = {
   findOne: findOne,
   list: list,
   create: create,
-  update: update
+  update: update,
+  listSummary
 };

@@ -17,15 +17,25 @@ exports.list = (req, res) => {
     });
 };
 
+exports.listSummary = (req, res) => {
+  proofreads
+    .listSummary(req.params.id)
+    .then(data => {
+      res.status(200).json({
+        success: true,
+        data: data
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        success: false,
+        message: error
+      });
+    });
+};
+
 exports.create = (req, res) => {
   const body = req.body;
-
-  //Check if if is the second submission
-  //If yes -> calculate the average between the first and this proofread. If is satisfatory, send e-mail to admin 
-  //If no -> just save to database
-  //Check if there is the need to send email message about the proofread to the user or admin
-  //Save items to databse
-  //Send emails
 
   proofreads
     .create(body)

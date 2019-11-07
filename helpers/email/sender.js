@@ -73,8 +73,8 @@ const sendProofreadMadeEmail = async (email, fullName, title, message) => {
     from: { email: "no-reply@jcecec.com.br", name: "JCECEC" },
     templateId: "d-149e273bf8234a849ff6cdc27b744497",
     dynamic_template_data: {
-      fullName: fullName,
       title: title,
+      fullName: fullName,
       message: message ? message : "O revisor não deixou uma mensagem."
     }
   };

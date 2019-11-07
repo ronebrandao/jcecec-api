@@ -5,6 +5,7 @@ const authenticationRoute = require("../helpers/authentication/index");
 const controller = require("../controllers/proofreads");
 
 router.get("/", authenticationRoute, controller.list);
+router.get("/:id", authenticationRoute, controller.listSummary);
 router.post("/", authenticationRoute, controller.create);
 router.get("/:id", authenticationRoute, controller.get);
 router.put("/:id", authenticationRoute, controller.update);
