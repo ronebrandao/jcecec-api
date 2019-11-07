@@ -21,8 +21,8 @@ exports.create = (req, res) => {
   const body = req.body;
 
   //Check if if is the second submission
-    //If yes -> calculate the average between the first and this proofread. If is satisfatory, send e-mail to admin 
-    //If no -> just save to database
+  //If yes -> calculate the average between the first and this proofread. If is satisfatory, send e-mail to admin 
+  //If no -> just save to database
   //Check if there is the need to send email message about the proofread to the user or admin
   //Save items to databse
   //Send emails

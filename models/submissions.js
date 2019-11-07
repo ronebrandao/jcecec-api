@@ -35,12 +35,21 @@ async function list(userId) {
     const user = await knex('user').where({ id: userId }).first()
     if (user.type === 'admin')
       return await knex('submissions')
-    else if (user.type === 'proofreader')
-      return await knex('submissions').whereIn('id', user.sub_ids)
+    else if (user.type === 'proofreader') {
+      //lista as submissoes que pertencem a esse revisor, mas que ele ainda nao revisou
+      const query = `select * from submissions as s
+                      where s.id not in 
+                        (select p.submission_id from proofreads as p where p.user_id = ?)
+                        and s.id in (??)`
+      let pr = (await knex.raw(query, [userId, user.sub_ids])).rows
+      return {
+        proofreader_submissions: pr,
+        own_submissions: await knex('submissions').where({ user_id: userId })
+      }
+    }
     else
       return await knex('submissions').where({ user_id: userId })
   } catch (err) {
-    console.log(err)
     throw err
   }
 }
