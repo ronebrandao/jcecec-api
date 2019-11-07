@@ -26,6 +26,21 @@ function list() {
   });
 }
 
+async function listSummary(submissionId) {
+  console.log(await knex.raw(`
+  SELECT  round(avg(originalidade)) as originalidade,
+        round(avg(contribuicao)) as contribuicao,
+        round(avg(qualidade))   as qualidade,
+        round(avg(organizacao))  as organizacao,
+        round(avg(recomendacao)) as recomendacao,
+        round(avg(confianca_revisor)) as confianca,
+        STRING_AGG (categoria, '|') categorias,
+        COUNT(*) as revisoes
+  FROM public.proofreads
+  WHERE submission_id 
+  `))
+}
+
 async function create(data) {
   try {
     return await knex("proofreads")
