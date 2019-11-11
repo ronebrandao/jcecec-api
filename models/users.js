@@ -43,7 +43,7 @@ function create(data) {
       .insert({
         name: data.firstName,
         family_name: data.lastName,
-        email: data.email,
+        email: data.email.toLowerCase(),
         birth_date: data.birthDate,
         institution: data.institution,
         type: data.type,
