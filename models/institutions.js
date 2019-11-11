@@ -14,11 +14,9 @@ function findOne(sigla) {
 }
 
 function list() {
-    console.log("OAP");
     return new Promise(async (resolve, reject) => {
         await knex("instituicoes")
         .then(data => {
-            console.log(data);
             resolve(data)
         })
         .catch(error => {
