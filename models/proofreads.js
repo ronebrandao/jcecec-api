@@ -63,15 +63,16 @@ async function create(data) {
         mensagem_organizacao: data.mensagemOrganizacao,
         created_at: moment().format("YYYY-MM-DD HH:mm:ss")
       })
-    // const submission = await trx.select("title").from('submissions').where({ id: data.submissionId }).first();
-    // const user = await trx.select("name", "family_name").from('user').where({ id: data.userId }).first();
-    // const admin = await trx.select('email').from('user').where({ type: 'admin' }).orderBy('id', 'asc').map(x => x.email);
 
-    // console.log(submission);
-    // console.log(user);
-    // console.log(admin);
+    const submission = await trx.select("title").from('submissions').where({ id: data.submissionId }).first();
+    const user = await trx.select("name", "family_name").from('user').where({ id: data.userId }).first();
+    let admins = await trx.select('email').from('user').where({ type: 'admin' }).orderBy('id', 'asc').map(x => x.email);
 
-    // await email.sendProofreadMadeEmail("rone_filho@hotmail.com", user.name + ' ' + user.family_name, submission.title, data.mensagemOrganizacao)
+
+    for (let e of admins) {
+      await email.sendProofreadMadeEmail(e, user.name + ' ' + user.family_name, submission.title, data.mensagemOrganizacao)
+    }
+
 
     trx.commit()
 
